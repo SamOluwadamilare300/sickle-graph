@@ -1,0 +1,62 @@
+# SickleGraph Configuration
+
+# Database Configuration
+database:
+  # Database type: "kuzu" or "neo4j"
+  type: "kuzu"
+  
+  # Kùzu Configuration
+  kuzu:
+    # Path to the Kùzu database
+    db_path: "./data/kuzu"
+  
+  # Neo4j Configuration
+  neo4j:
+    # URI of the Neo4j database
+    uri: "bolt://localhost:7687"
+    # Username for authentication
+    username: "neo4j"
+    # Password for authentication
+    password: "password"
+    # Database name
+    database: "neo4j"
+
+# Data Pipeline Configuration
+pipeline:
+  # PubMed Configuration
+  pubmed:
+    # Email for Entrez
+    email: "your.email@example.com"
+    # API key for Entrez (optional)
+    api_key: ""
+    # Maximum number of results to fetch
+    max_results: 1000
+    # Default query
+    default_query: "sickle cell disease gene therapy"
+  
+  # ClinicalTrials.gov Configuration
+  clinical_trials:
+    # Maximum number of results to fetch
+    max_results: 1000
+    # Default query
+    default_query: "sickle cell disease gene therapy"
+
+# ELIZA AI Research Assistant Configuration
+eliza:
+  # Language model to use
+  model_name: "gpt-4"
+  # Default language
+  default_language: "en"
+
+# API Configuration
+api:
+  # Host to bind to
+  host: "0.0.0.0"
+  # Port to listen on
+  port: 8000
+  # Enable CORS
+  enable_cors: true
+  # CORS origins
+  cors_origins: ["*"]
+  # Enable API documentation
+  enable_docs: true

@@ -259,14 +259,10 @@ def main():
     # run-pipeline command
     run_pipeline_parser = subparsers.add_parser("run-pipeline", help="Run the data pipeline")
     run_pipeline_parser.add_argument(
-        "--sources",
-        type=str,
-        default="all",
-        help="Data sources to run (comma-separated, or 'all')"
-    )
-    run_pipeline_parser.add_argument(
-        "--query",
-        type=str,
+    "--sources",
+    type=str,
+    default="all",
+    help="Data sources to run (comma-separated, or 'all')"
     )
     run_pipeline_parser.add_argument(
         "--query",
@@ -274,6 +270,22 @@ def main():
         default="sickle cell disease gene therapy",
         help="Query to use for data sources"
     )
+    # run_pipeline_parser.add_argument(
+    #     "--sources",
+    #     type=str,
+    #     default="all",
+    #     help="Data sources to run (comma-separated, or 'all')"
+    # )
+    # run_pipeline_parser.add_argument(
+    #     "--query",
+    #     type=str,
+    # )
+    # run_pipeline_parser.add_argument(
+    #     "--query",
+    #     type=str,
+    #     default="sickle cell disease gene therapy",
+    #     help="Query to use for data sources"
+    # )
     
     # eliza-query command
     eliza_query_parser = subparsers.add_parser("eliza-query", help="Query the ELIZA AI Research Assistant")

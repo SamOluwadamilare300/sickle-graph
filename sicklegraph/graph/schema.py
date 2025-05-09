@@ -6,7 +6,7 @@ node types, relationship types, and properties.
 """
 
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any
 import json
 
 
@@ -82,9 +82,9 @@ class KnowledgeGraphSchema:
                     "alternative_allele": "STRING",
                     "position": "INT64",
                     "consequence": "STRING",
-                    "population_frequency": "FLOAT64",
-                    "african_frequency": "FLOAT64",
-                    "nigerian_frequency": "FLOAT64",
+                    "population_frequency": "DOUBLE",  # Changed from FLOAT64
+                    "african_frequency": "DOUBLE",     # Changed from FLOAT64
+                    "nigerian_frequency": "DOUBLE",    # Changed from FLOAT64
                     "description": "STRING"
                 },
                 "primary_key": "id"
@@ -227,15 +227,15 @@ class KnowledgeGraphSchema:
                 "target": NodeLabel.GENE,
                 "properties": {
                     "mechanism": "STRING",
-                    "efficacy": "FLOAT64",
-                    "specificity": "FLOAT64"
+                    "efficacy": "DOUBLE",     # Changed from FLOAT64
+                    "specificity": "DOUBLE"   # Changed from FLOAT64
                 }
             },
             RelationshipType.TREATS: {
                 "source": NodeLabel.TREATMENT,
                 "target": NodeLabel.DISEASE,
                 "properties": {
-                    "efficacy": "FLOAT64",
+                    "efficacy": "DOUBLE",     # Changed from FLOAT64
                     "phase": "STRING",
                     "evidence_level": "STRING"
                 }
@@ -277,7 +277,7 @@ class KnowledgeGraphSchema:
                 "target": NodeLabel.PAPER,
                 "properties": {
                     "context": "STRING",
-                    "sentiment": "FLOAT64"
+                    "sentiment": "DOUBLE"     # Changed from FLOAT64
                 }
             },
             RelationshipType.CONDUCTED_BY: {
@@ -341,7 +341,7 @@ class KnowledgeGraphSchema:
                 "target": NodeLabel.PROTEIN,
                 "properties": {
                     "mechanism": "STRING",
-                    "affinity": "FLOAT64",
+                    "affinity": "DOUBLE",     # Changed from FLOAT64
                     "effect": "STRING"
                 }
             }
@@ -356,22 +356,23 @@ class KnowledgeGraphSchema:
         """
         statements = []
         
-        # Create node tables
+        # Create node tables 
         for label, schema in self.node_schemas.items():
             props = ", ".join([f"{name} {dtype}" for name, dtype in schema["properties"].items()])
             primary_key = schema["primary_key"]
-            stmt = f"CREATE NODE TABLE {label} ({props}, PRIMARY KEY ({primary_key}))"
+            # Use label.value to get string value
+            stmt = f"CREATE NODE TABLE {label.value} ({props}, PRIMARY KEY ({primary_key}))"
             statements.append(stmt)
         
         # Create relationship tables
         for rel_type, schema in self.relationship_schemas.items():
-            source = schema["source"]
-            target = schema["target"]
+            source = schema["source"].value  # Get string value
+            target = schema["target"].value  # Get string value
             if schema["properties"]:
                 props = ", ".join([f"{name} {dtype}" for name, dtype in schema["properties"].items()])
-                stmt = f"CREATE REL TABLE {rel_type} (FROM {source} TO {target}, {props})"
+                stmt = f"CREATE REL TABLE {rel_type.value} (FROM {source} TO {target}, {props})"
             else:
-                stmt = f"CREATE REL TABLE {rel_type} (FROM {source} TO {target})"
+                stmt = f"CREATE REL TABLE {rel_type.value} (FROM {source} TO {target})"
             statements.append(stmt)
         
         return statements
@@ -431,6 +432,7 @@ class KnowledgeGraphSchema:
         return schema
 
 
+# This function was incorrectly indented inside the class
 def create_initial_schema() -> KnowledgeGraphSchema:
     """
     Create the initial schema for SickleGraph.

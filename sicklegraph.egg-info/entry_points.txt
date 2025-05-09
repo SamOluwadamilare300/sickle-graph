@@ -1,0 +1,2 @@
+[console_scripts]
+sicklegraph = sicklegraph.cli:main
